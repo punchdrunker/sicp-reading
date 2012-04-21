@@ -18,29 +18,5 @@
                     (cons (entry tree)
                           (copy-to-list (right-branch tree)
                                         result-list)))))
-  (trace copy-to-list)
+  ;(trace copy-to-list)
   (copy-to-list tree '()))
-
-
-
-(trace tree->list-1)
-(trace tree->list-2)
-(define mytree
-  (make-tree 4
-             (make-tree 2
-                        (make-tree 1 '() '())
-                        (make-tree 3 '() '()))
-             (make-tree 6
-                        (make-tree 5 '() '())
-                        (make-tree 7 '() '()))))
-
-(test-start "問題2.63")
-(test-section "tree->list-1")
-(test* "(tree->list-1 mytree)" '(1 2 3 4 5 6 7) (tree->list-1 mytree))
-(test-section "tree->list-2")
-(test* "(tree->list-2 mytree)" '(1 2 3 4 5 6 7) (tree->list-2 mytree))
-(test-end)
-
-; a.
-; b.
-
