@@ -38,9 +38,16 @@
 (test-start "問題2.65")
 (test-section "union-set ")
 (test* "(union-set-tree mytree1 mytree2)" '(5 (2 (1 () ()) (3 () (4 () ()))) (8 (6 () (7 () ())) (9 () (10 () ())))) (union-set-tree mytree1 mytree2))
-(test-section "union-set ")
+;
+;        5
+;   2        8
+; 1   3    6   9
+;       4    7   10
 
 (test-section "intersection-set-tree ")
 (test* "(intersection-set-tree mytree1 mytree2)" '(5 (4 () ()) (6 () (7 () ()))) (intersection-set-tree mytree1 mytree2))
+;    5
+;  4   6
+;       7
 
 (test-end)

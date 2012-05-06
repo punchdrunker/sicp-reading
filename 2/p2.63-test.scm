@@ -1,7 +1,5 @@
 (load "./p2.63.scm")
 
-;(trace tree->list-1)
-;(trace tree->list-2)
 (define mytree
   (make-tree 4
              (make-tree 2
@@ -10,6 +8,9 @@
              (make-tree 6
                         (make-tree 5 '() '())
                         (make-tree 7 '() '()))))
+
+;(trace tree->list-1)
+;(trace tree->list-2)
 
 (test-start "問題2.63")
 (test-section "tree->list-1")
