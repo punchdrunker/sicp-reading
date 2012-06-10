@@ -7,7 +7,7 @@
         (if (null? pairs)
           '()
           (cons (list (car pairs) (expt 2 i))
-                (iter (cdr pairs))))))
+                (iter (cdr pairs)) ))))
     (iter pairs)))
 
 (define set5 '(A B C D E))

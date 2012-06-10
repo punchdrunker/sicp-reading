@@ -1,7 +1,7 @@
 (use slib)
 (require 'trace)
 (load "./bool.scm")
-(load "./2.4.1.scm")
+(load "./2.4.1-1.scm")
 
 ;;タグを付ける構成子
 (define (attach-tag type-tag contents)
