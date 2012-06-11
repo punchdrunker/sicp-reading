@@ -365,8 +365,8 @@
   (put 'gcd                '(dense dense)   (lambda (t1 t2)       (tag (gcd-terms t1 t2))))
   (put 'gcd                '(dense sparse)  (lambda (t1 t2)       (tag (gcd-terms t1 (sparse->dense t2)))))
   ; added@b
-;  (put 'gcd                '(dense dense)   (lambda (t1 t2)       (tag (reduce (gcd-terms t1 t2)))))
-;  (put 'gcd                '(dense sparse)  (lambda (t1 t2)       (tag (reduce (gcd-terms t1 (sparse->dense t2))))))
+  (put 'gcd                '(dense dense)   (lambda (t1 t2)       (tag (reduce (gcd-terms t1 t2)))))
+  (put 'gcd                '(dense sparse)  (lambda (t1 t2)       (tag (reduce (gcd-terms t1 (sparse->dense t2))))))
 
   'done)
 
@@ -576,8 +576,8 @@
   (put 'gcd                '(sparse sparse)  (lambda (t1 t2)       (tag (gcd-terms t1 t2))))
   (put 'gcd                '(sparse dense)   (lambda (t1 t2)       (tag (gcd-terms t1 (dense->sparse t2)))))
   ; added@b
-;  (put 'gcd                '(sparse sparse)  (lambda (t1 t2)       (tag (reduce (gcd-terms t1 t2)))))
-;  (put 'gcd                '(sparse dense)   (lambda (t1 t2)       (tag (reduce (gcd-terms t1 (dense->sparse t2))))))
+  (put 'gcd                '(sparse sparse)  (lambda (t1 t2)       (tag (reduce (gcd-terms t1 t2)))))
+  (put 'gcd                '(sparse dense)   (lambda (t1 t2)       (tag (reduce (gcd-terms t1 (dense->sparse t2))))))
 
   'done)
 

@@ -559,7 +559,7 @@
   (define (reduce L)
     (reduce-list L (apply gcd (map coeff L))))
   
-  ; added@a dense ==>
+  ; added@a sparse ==>
   (define (reduce-terms n d)
     (let* ((gcd-nd (reduce (gcd-terms n d)))
            (nd-factor (integerising-factor n d))

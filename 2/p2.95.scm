@@ -308,10 +308,18 @@
     (cadr (div-terms a b)))
 
   (define (gcd-terms a b)
+  (display 'a)
+  (newline)
+  (display a)
+  (newline)
+  (display 'b)
+  (newline)
+  (display b)
+  (newline)
     (if (empty-termlist? b)
       a
       (gcd-terms b (remainder-terms a b))))
-  (trace gcd-terms)
+  ;(trace gcd-terms)
 
   ;; interface to rest of the system
   (put 'make-poly           'dense          (lambda (var terms)   (make-poly var terms)))
