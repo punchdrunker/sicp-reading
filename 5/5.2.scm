@@ -177,7 +177,8 @@
 ; 引数として制御器の文書と計算機のモデルをとり, モデルに格納すべき命令列を返す.
 ; assembleはextract-labelsを呼び出し, 渡された制御器文書から, 最初の命令リストとラベル表を構築する.
 ; extract-labelsの第二引数は, これらの結果を処理するのに呼び出す手続きである:
-;     この手続きはupdate-insts!を使い, 命令実行手続きを生成し, それらを命令リストに挿入して, 修正したリストを返す.
+;     この手続きはupdate-insts!を使い, 命令実行手続きを生成し,
+;     それらを命令リストに挿入して, 修正したリストを返す.
 ;
 ;
 
@@ -238,7 +239,8 @@
 (define (set-instruction-execution-proc! inst proc)
   (set-cdr! inst proc))
 
-; われわれのシミュレータは命令文書を使わない. しかし虫とりのためには持ち回るのが便利である(問題5.16参照).
+; われわれのシミュレータは命令文書を使わない.
+; しかし虫とりのためには持ち回るのが便利である(問題5.16参照).
 
 ; ラベル表の要素は対である:
 (define (make-label-entry label-name insts)
@@ -283,9 +285,20 @@
 ; make-assignは選択子 assign-reg-name, assign-value-exp を使い,
 ; assign命令から目標のレジスタ名(命令の第二要素)と値の式(命令を形成する式のリストの残り)を取り出す.
 ; レジスタ名は, 目標のレジスタオブジェクトを作るべくget-registerで探す.
-; 値の式は値が演算の結果ならmake- operation-expに, それ以外なら make-primitive-expに渡す. (次に示す)これらの手続きは, 値の式を構文解析し, その値の実行手続きを作る. これは value-procという引数なしの手続きで, シミュレーション中にレジスタに代入する実際の値を得るために評価される. レジスタ名の探索と, 値の式の構文解析は, 命令がシミュレートされる度ではなく, アセンブリ時に一回だけ行うことに注意しよう. この省力は, 実行手続きを使う理由であり, 4.1.7節の評価器で, プログラム解析を実行から分離して得た省力と直接に対応する.
-;   make-assignが返す結果は, assign命令の実行手続きである. この手続きを(計算機モデルのexecute手続きで)呼び出すと, 目標のレジスタの内容を, value-procを評価して得られる結果に設定する.
-;   それからadvance-pcを走らせ, pcを次の命令へと進める. advance-pcはbranch とgotoを除き, すべての命令の通常の終了である.
+; 値の式は値が演算の結果ならmake-operation-expに,
+; それ以外なら make-primitive-expに渡す.
+; (次に示す)これらの手続きは, 値の式を構文解析し, その値の実行手続きを作る.
+; これは value-procという引数なしの手続きで,
+; シミュレーション中にレジスタに代入する実際の値を得るために評価される.
+; レジスタ名の探索と, 値の式の構文解析は, 命令がシミュレートされる度ではなく,
+; アセンブリ時に一回だけ行うことに注意しよう.
+; この省力は, 実行手続きを使う理由であり, 4.1.7節の評価器で,
+; プログラム解析を実行から分離して得た省力と直接に対応する.
+; make-assignが返す結果は, assign命令の実行手続きである.
+; この手続きを(計算機モデルのexecute手続きで)呼び出すと,
+; 目標のレジスタの内容を, value-procを評価して得られる結果に設定する.
+; それからadvance-pcを走らせ, pcを次の命令へと進める.
+; advance-pcはbranch とgotoを除き, すべての命令の通常の終了である.
 ;
 (define (make-assign inst machine labels operations pc)
   (let ((target
@@ -310,7 +323,11 @@
 (define (advance-pc pc)
   (set-contents! pc (cdr (get-contents pc))))
 
-;; test 命令
+;; test命令
+;; make-testはtest命令を同様に扱う.
+;; テストすべき条件を規定する式を抜き出し, そのための実行手続きを生成する.
+;; シミュレーション時には, 条件に対する手続きが呼び出され,
+;; 結果がflagレジスタに代入され, pcが進められる:
 (define (make-test inst machine labels operations flag pc)
   (let ((condition (test-condition inst)))
     (if (operation-exp? condition)
@@ -325,7 +342,10 @@
 (define (test-condition test-instruction)
   (cdr test-instruction))
 
-;; branch 命令
+;; branch命令に対する実行手続きは, flagレジスタの内容を調べ,
+;; pcの内容を(分岐する時)分岐目的地へ設定するか(分岐しない時) pcを進めるかする.
+;; branch命令で指示される行き先はラベルでなければならず, make-branchはこれを強要することに注意しよう.
+;; またラベルはアセンブリ時に探すので, branch命令をシミュレートする度でないことにも注意しよう.
 (define (make-branch inst machine labels flag pc)
   (let ((dest (branch-dest inst)))
     (if (label-exp? dest)
@@ -340,7 +360,8 @@
 (define (branch-dest branch-instruction)
   (cadr branch-instruction))
 
-;; goto 命令
+;; goto命令は, 行き先がラベルとしてかレジスタとして指定出来る点と,
+;; 調べるべき条件がない---pcは常に新しい行き先へ設定する---点を除き, 分岐命令と似ている.
 (define (make-goto inst machine labels pc)
   (let ((dest (goto-dest inst)))
     (cond ((label-exp? dest)
@@ -361,6 +382,8 @@
   (cadr goto-instruction))
 
 ;; その他の命令
+;; スタック命令saveとrestoreは
+;; 指示されたレジスタでスタックを使い, pcを進めるだけである:
 (define (make-save inst machine stack pc)
   (let ((reg (get-register machine
                            (stack-inst-reg-name inst))))
@@ -378,6 +401,8 @@
 (define (stack-inst-reg-name stack-instruction)
   (cadr stack-instruction))
 
+; make-performが扱う命令の最後の型は, 実行すべき働きに対して実行手続きを生成する.
+; シミュレーション時に働きの手続きが実行され, pcが進められる:
 (define (make-perform inst machine labels operations pc)
   (let ((action (perform-action inst)))
     (if (operation-exp? action)
@@ -392,6 +417,13 @@
 (define (perform-action inst) (cdr inst))
 
 ;; 部分式の実行手続き
+;; reg, labelまたはconst式の値は,
+;; レジスタへの代入(make-assign)や演算(次のmake-operation-exp)への入力で必要になる.
+;; 次の手続きはシミュレーション時にこれらの式の値を作る実行手続きを生成する:
+;; reg, labelおよびconst式の構文は↓の5つで決まる
+;; register-exp?  register-exp-reg constant-exp?  constant-exp-value label-exp?
+
+(define (label-exp-label exp) (cadr exp))
 (define (make-primitive-exp exp machine labels)
   (cond ((constant-exp? exp)
          (let ((c (constant-exp-value exp)))
@@ -425,6 +457,15 @@
     (eq? (car exp) tag)
     #f))
 
+; assign, performおよびtest命令は,
+; (regおよびconst式の規定する)いくつかの被演算子に対する(op式の規定する)機械演算の作用を含むかも知れない.
+; 次の手続きは「演算式」---演算と被演算子の式を含むリスト---に対する実行手続きを命令から作る.
+;
+; 演算式の構文は, operation-exp?, operation-exp-op, operation-exp-operands, で決る.
+; 演算式の扱いは, 各被演算子について実行手続きを生成するという点で,
+; 4.1.7節の評価器のanalyze-application手続きによる手続き作用の扱いと非常によく似ていることを見よう.
+; シミュレーション時には, 被演算子手続きを呼び出し, その結果の値へ演算をシミュレートするScheme手続きを作用させる.
+; シミュレーション手続きは, 計算機の演算表から演算名で探して見つける:
 (define (make-operation-exp exp machine labels operations)
   (let ((op (lookup-prim (operation-exp-op exp) operations))
         (aprocs

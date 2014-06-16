@@ -1,3 +1,7 @@
+; 問題 5.7
+;
+; このシミュレータを使い, 問題5.4で設計した計算機をテストせよ. 
+
 (load "./5.2.scm")
 
 ;a. 再帰的べき乗:
@@ -39,10 +43,18 @@
           (goto (reg continue))
       expt-done)))
 
-(set-register-contents! expt-machine 'b 2)
-(set-register-contents! expt-machine 'n 8)
-(start expt-machine)
-(show-register-contents expt-machine 'val)
+;(set-register-contents! expt-machine 'b 2)
+;(set-register-contents! expt-machine 'n 8)
+;(start expt-machine)
+;(show-register-contents expt-machine 'val)
+
+;b. 反復的べき乗:
+;(define (expt b n)
+;  (define (expt-iter counter product)
+;    (if (= counter 0)
+;      product
+;      (expt-iter (- counter 1) (* b product))))
+;  (expt-iter n 1))
 
 (define expt-machine2
   (make-machine
