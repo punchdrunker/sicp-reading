@@ -18,8 +18,12 @@
                                             (reg argl)
                                             (reg env))))
       ; 引数と環境をconsしたものを追加する
-      (compile-sequence (lambda-body exp) 'val 'return (cons formals ct-env)))))
+      (compile-sequence
+        (lambda-body exp)
+        'val
+        'return (cons formals ct-env)))))
 
+; ct-envを追加
 (define (compile-sequence seq target linkage ct-env)
   (if (last-exp? seq)
     (compile (first-exp seq) target linkage ct-env)

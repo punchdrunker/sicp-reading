@@ -16,6 +16,7 @@
       'not-found 
       (let ((o (search-variable variable (car frames) 0))) 
         (if o 
+        ;; 何番目のフレームの何番目の要素かを返す
           (cons f o) 
           (search-frame (cdr frames) (+ f 1)))))) 
   (search-frame env 0)) 

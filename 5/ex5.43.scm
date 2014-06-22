@@ -5,8 +5,14 @@
 ; set!を使って正しい値に初期化する通常のlambda変数として組み込まれているように解釈すべきである.
 ; 4.1.6節と問題4.16は, 超循環評価器を修正し, 内部定義を掃き出してこれを実現する方法を示した.
 ; 翻訳系を修正し, 手続き本体を翻訳する前に, 同じ変換を実行するようにせよ. 
+;
+; 4.1.6
+; http://sicp.iijlab.net/fulltext/x416.html
+; lambda式の本体を評価する前に本体にある内部定義を 「掃き出し」消してしまう.
+; 内部で定義された変数はletで作り出し, 代入で値を設定する.
 
 (load "./ex5.42.scm")
+
 (define (scan-out-defines body)
   (define (iter exp vars sets exps)
     (if (null? exp)
@@ -31,6 +37,7 @@
   (if (include-define? body)
     (let ((var-val-exp-list (iter body '() '() '())))
       (list (cons 'let (cons (car var-val-exp-list) (append (cadr var-val-exp-list) (caddr var-val-exp-list))))))
+    ; 内部定義がなければ何もしない
     body))
 
 
@@ -48,6 +55,7 @@
                    (reg argl)
                    (reg env))))
       (compile-sequence
+        ; scan-out-definesを利用する
         ; (lambda-body exp)
         (scan-out-defines (lambda-body exp))
         'val

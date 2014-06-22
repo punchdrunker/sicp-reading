@@ -8,6 +8,7 @@
 
 (load "./5.5.scm")
 
+; lexical-addressはフレームと変位数のリスト
 (define (make-lexical-address framenum displacement)
   (list framenum displacement))
 
@@ -17,7 +18,7 @@
 (define (lexical-address-displacement lexical-address)
   (cadr lexical-address))
 
-; 全てのフレームは変数のリストと値のリストのペア
+; frameはリストの対: そのフレームで束縛されている変数のリストと, 対応づけられている値のリスト
 (define (lexical-address-lookup lexical-address env)
   (let ((addr-frame (list-ref
                       env
@@ -30,11 +31,16 @@
       (cons 'bound addr-val))))
 
 (define (lexical-address-set! lexical-address env newval)
-  (let ((addr-frame (list-ref env (lexical-address-framenum lexical-address))))
+  (let ((addr-frame (list-ref
+                      env
+                      (lexical-address-framenum lexical-address))))
     (define (iter vals count)
       (cond ((null? vals)
              (error "Invalid lexical address - bad displacement"))
             ((= count 0)
              (set-car! vals newval))
-            (else (iter (cdr vals) (+ 1 count)))))
-    (iter (frame-values addr-frame) (lexical-address-displacement lexical-address))))
+            (else
+              (iter (cdr vals) (+ 1 count)))))
+    (iter
+      (frame-values addr-frame)
+      (lexical-address-displacement lexical-address))))

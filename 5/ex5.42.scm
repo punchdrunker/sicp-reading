@@ -2,16 +2,19 @@
 ;
 ; 問題5.41のfind-variableを使い,
 ; compile-variableとcompile-assignmentを書き直して文面アドレス命令を出力するようにせよ.
+;
 ; find-variableがnot-foundを返す(つまり, その変数が翻訳時環境にない)場合は,
 ; コード生成器に以前のように束縛を探すため評価演算を使わせなければならない.
 ; (翻訳時に見つからない変数が出てくる唯一の場所は大域環境, つまり実行時環境の一部だが,
 ; 翻訳時環境の一部ではないところである.47 従って, 望むなら, envで見つかる全実行時環境を探させる代りに,
 ; 評価演算に演算(op~get-global-environment)で得られる大域環境を直接見させてもよい.)
+;
 ; 修正した翻訳系を, 本節の最初の入れ子のlambda 組合せのようないくつかの単純な場合でテストせよ. 
 
 (load "./ex5.40.scm")
 (load "./ex5.41.scm")
 
+; ct-envを受け取る
 (define (compile-variable exp target linkage ct-env)
   (let ((address (find-variable exp ct-env)))
     ;(print "compile-variable: " address)
@@ -29,6 +32,7 @@
                     (const ,address)
                     (reg env))))))))
 
+; ct-envを受け取る
 (define (compile-assignment exp target linkage ct-env)
   (let ((var (assignment-variable exp))
         (get-value-code
@@ -55,6 +59,7 @@
                 (assign ,target (const ok))))
             ))))))
 
+; ct-envを受け取る
 (define (compile exp target linkage ct-env)
   (cond ((self-evaluating? exp)
          (compile-self-evaluating exp target linkage))
