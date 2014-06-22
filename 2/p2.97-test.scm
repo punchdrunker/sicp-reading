@@ -12,4 +12,3 @@
 
 (eqt '(rational (polynomial x sparse (3 -1) (2 -2) (1 -3) (0 -1)) (polynomial x sparse (4 -1) (3 -1) (1 1) (0 1)))
      (add rf1 rf2))
-

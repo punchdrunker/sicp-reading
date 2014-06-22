@@ -11,8 +11,8 @@
 
 
 ; 今度は係数が整数になった
-(eqt '(polynomial x sparse (2 1458) (1 -2916) (0 1458))
-     (greatest-common-divisor qs1 qs2))
+;(eqt '(polynomial x sparse (2 1458) (1 -2916) (0 1458))
+;     (greatest-common-divisor qs1 qs2))
 
 
 ;(define pd1 (make-dense-polynomial 'x '(1 -2 1)))
