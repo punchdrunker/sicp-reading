@@ -96,3 +96,11 @@
 ;    'next
 ;    '())
 ;  )
+
+;(show-code
+  (compile
+    '(+ (* a x) (* b y))
+    'val
+    'next
+    '())
+  ;)

@@ -62,14 +62,15 @@
         'return
         (cons formals ct-env)))))
 
-(show-code
-  (compile
-    '(lambda (x y)
-       (define u
-         (+ u x))
-       (define v
-         (- v y))
-       (* u v))
-    'val
-    'next
-    '()))
+;(show-code
+;  (compile
+;    '(lambda (x y)
+;       (define u
+;         (+ u x))
+;       (define v
+;         (- v y))
+;       (* u v))
+;    'val
+;    'next
+;    '())
+;  )
